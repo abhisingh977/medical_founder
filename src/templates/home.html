@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>Anesthesia Doctors</title>
     <link rel="stylesheet" href="/static/css/home.css">
 </head>
@@ -15,47 +16,58 @@
     <main>
         <a href="{{ url_for('add_docter') }}"class="button">Add New Profile</a>
         <br><br>
+        <main>
 
-        <ul class="doctor-list">
-            <li class="doctor">
-                <img src="/static/images/doc1.png" alt="Doctor 1">
-                <h2>Dr. Nikhil Singh</h2>
-                <p>Specialty: Anesthesiology</p>
-                <p>Location: Lucknow</p>
-                <p>Experience: 15 years</p>
-                <button id="contact">Contact</button>
-            </li>
-            <li class="doctor">
-                <img src="/static/images/doc2.png" alt="Doctor 2">
-                <h2>Dr. Sandeep Singh</h2>
-                <p>Specialty: Anesthesiology</p>
-                <p>Location: Lucknow</p>
-                <p>Experience: 10 years</p>
-                <button id="contact">Contact</button>
-            </li>
-            <li class="doctor">
-                <img src="/static/images/doc2.png" alt="Doctor 2">
-                <h2>Dr. Sandeep Singh</h2>
-                <p>Specialty: Anesthesiology</p>
-                <p>Location: Lucknow</p>
-                <p>Experience: 10 years</p>
-                <button id="contact">Contact</button>
-            </li>
-            <li class="doctor">
-                <img src="/static/images/doc2.png" alt="Doctor 2">
-                <h2>Dr. Sandeep Singh</h2>
-                <p>Specialty: Anesthesiology</p>
-                <p>Location: Lucknow</p>
-                <p>Experience: 10 years</p>
-                <button id="contact">Contact</button>
-            </li>
-            <!-- Add more doctors as needed -->
-        </ul>
-        
+            <ul class="doctor-list" id="doctor-list">
+
+            </ul>
+        </main>
+
     </main>
     <footer>
         <p>&copy; 2024 Anesthesia Clinic. All rights reserved.</p>
     </footer>
+
+      <!-- Script to fetch and display doctor data -->
+      <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "/get_doctors",
+                type: "GET",
+                success: function (data) {
+                    displayDoctors(data);
+                },
+                error: function (error) {
+                    console.log("Error fetching doctors:", error);
+                }
+            });
+
+            function displayDoctors(doctors) {
+                var doctorList = $("#doctor-list");
+
+                doctors.forEach(function (doctor) {
+                    var listItem = $("<li>").addClass("doctor");
+                    // Display the profile picture
+                    if (doctor.profile_pic) {
+                        var gcsUrl = doctor.profile_pic.replace("gs://", "https://storage.googleapis.com/");
+                        var profilePic = $("<img>").attr("src", gcsUrl).attr("alt", "Profile Picture");
+    
+                        listItem.append(profilePic);
+                        console.log("Profile Picture Path:", gcsUrl);
+                    }
+
+                    listItem.append("<h2>" + doctor.name + "</h2>");
+                    listItem.append("<p>Specialty: " + doctor.specialty + "</p>");
+                    listItem.append("<p>Location: " + doctor.location + "</p>");
+                    listItem.append("<p>Experience: " + doctor.experience + "</p>");
+                    listItem.append("<p>Whatsapp Number: " + doctor.whatsapp_number + "</p>");
+                    listItem.append("<button id='contact'>Contact</button>");
+
+                    doctorList.append(listItem);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

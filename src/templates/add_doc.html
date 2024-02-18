@@ -13,11 +13,20 @@
         <h1>Add Your Profile</h1>
     </header>
     <main>
-        <form action="{{ url_for('process_profile') }}" method="post">
+        <form action="{{ url_for('process_profile') }}" method="post" enctype="multipart/form-data">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
             <label for="location">Location:</label>
             <input type="text" id="location" name="location" required>
+            <label for="Specialty">Specialty:</label>
+            <input type="text" id="specialty" name="specialty" required>
+            <label for="Experience">Experience:</label>
+            <input type="text" id="experience" name="experience" required>
+            <label for="Whatsapp Number">Whatsapp Number:</label>
+            <input type="text" id="number" name="number" required>
+            <label for="profile_pic">Add Profile Picture</label>
+            <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+            <br><br>
             <button type="submit">Submit</button>
         </form>
     </main>

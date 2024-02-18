@@ -2,3 +2,4 @@ gunicorn==20.1.0
 google-cloud-firestore==2.11.1
 flask==2.2.5
 python-dotenv
+google-cloud-storage
