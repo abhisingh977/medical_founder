@@ -1,16 +1,27 @@
 from flask import Flask, url_for, render_template, request, redirect, make_response, session
-# from google.cloud import firestore
+from google.cloud import firestore
 from uuid import uuid1
-# db = firestore.Client(project="healthstaffconnect")
+from dotenv import load_dotenv
+import logging
+import os
+
+logging.basicConfig(level=logging.INFO)
+load_dotenv(".env")
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+db = firestore.Client(project="healthstaffconnect")
 app = Flask("healthstaffconnect")
 
 session_uuid = str(uuid1())
 
-# doctor_collection = db.collection("doctors")
+
+doctor_collection = db.collection("doctors")
+doc_set = doctor_collection.document(session_uuid)
 
 @app.route("/")
 def index():
+   doc_set.set({"data": "working"})
    return render_template("home.html")
+
 
 @app.route("/contact")
 def contact():

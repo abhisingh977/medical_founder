@@ -3,6 +3,7 @@ FROM python:3.8.0-slim
 # Copy local code to the container image
 COPY src /src/
 COPY requirements.txt /src/requirements.txt
+COPY healthstaffconnect-e913cb44aef7.json /src/healthstaffconnect-e913cb44aef7.json
 # Sets the working directory
 WORKDIR /src
 
