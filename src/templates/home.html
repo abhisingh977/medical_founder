@@ -13,6 +13,9 @@
         <h1>Anesthesia Doctors</h1>
     </header>
     <main>
+        <a href="{{ url_for('add_docter') }}"class="button">Add New Profile</a>
+        <br><br>
+
         <ul class="doctor-list">
             <li class="doctor">
                 <img src="/static/images/doc1.png" alt="Doctor 1">
@@ -48,22 +51,7 @@
             </li>
             <!-- Add more doctors as needed -->
         </ul>
-<!-- 
-        <form method="POST" action="/add_doctor">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="specialty">Specialty:</label>
-            <input type="text" id="specialty" name="specialty" required>
-
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" required>
-
-            <label for="experience">Experience:</label>
-            <input type="text" id="experience" name="experience" required>
-
-            <button type="submit">Add Doctor</button>
-        </form> -->
+        
     </main>
     <footer>
         <p>&copy; 2024 Anesthesia Clinic. All rights reserved.</p>
