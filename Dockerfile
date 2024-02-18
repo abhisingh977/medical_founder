@@ -12,7 +12,6 @@ RUN pip install --upgrade pip
 # RUN python -m nltk.downloader all-corpora
 #Install python libraries from requirements.txt
 RUN pip3 install -r requirements.txt
-ENV GOOGLE_APPLICATION_CREDENTIALS=/app/medical-docu-dec5db602577.json
 # Set $PORT environment variable
 ENV PORT 8080
 EXPOSE 8080
