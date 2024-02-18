@@ -4,6 +4,8 @@ FROM python:3.8.0-slim
 COPY src /src/
 COPY requirements.txt /src/requirements.txt
 COPY healthstaffconnect-e913cb44aef7.json /src/healthstaffconnect-e913cb44aef7.json
+# COPY src/config/.env 
+# COPY healthstaffconnect-e913cb44aef7.json /src/healthstaffconnect-e913cb44aef7.json
 # Sets the working directory
 WORKDIR /src
 
@@ -13,6 +15,7 @@ RUN pip install --upgrade pip
 # RUN python -m nltk.downloader all-corpora
 #Install python libraries from requirements.txt
 RUN pip3 install -r requirements.txt
+ENV GOOGLE_APPLICATION_CREDENTIALS=healthstaffconnect-e913cb44aef7.json
 # Set $PORT environment variable
 ENV PORT 8080
 EXPOSE 8080

@@ -30,6 +30,7 @@
 
       <!-- Script to fetch and display doctor data -->
       <script>
+     
         $(document).ready(function () {
             $.ajax({
                 url: "/get_doctors",
@@ -61,7 +62,8 @@
                     listItem.append("<p>Location: " + doctor.location + "</p>");
                     listItem.append("<p>Experience: " + doctor.experience + "</p>");
                     listItem.append("<p>Whatsapp Number: " + doctor.whatsapp_number + "</p>");
-                    listItem.append("<button id='contact'>Contact</button>");
+                    listItem.append("<button id='contact' onclick=\"window.open('https://wa.me/" + doctor.whatsapp_number + "', '_blank')\">Contact</button>");
+
 
                     doctorList.append(listItem);
                 });

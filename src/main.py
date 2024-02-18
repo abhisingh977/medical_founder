@@ -1,15 +1,18 @@
 from flask import Flask, url_for, render_template, request, redirect, make_response, session, jsonify
 from google.cloud import firestore
 from uuid import uuid1
-from dotenv import load_dotenv
+from PIL import Image
+from io import BytesIO
+
+# from dotenv import load_dotenv
 import logging
 import os
 from google.cloud import storage
 from werkzeug.utils import secure_filename
 
 logging.basicConfig(level=logging.INFO)
-load_dotenv(".env")
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+# load_dotenv(".env")
+# os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "config/healthstaffconnect-e913cb44aef7.json" #os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
 db = firestore.Client(project="healthstaffconnect")
 app = Flask("healthstaffconnect")
 bucket_name = "doctor_pic"
@@ -43,7 +46,6 @@ def get_doctors():
     for doc in docs:
         doctor_data = doc.to_dict()
         doctors.append(doctor_data)
-        print(doctor_data)
     return jsonify(doctors)
 
 
@@ -59,6 +61,7 @@ def process_profile():
     specialty = request.form.get('specialty')
     experience = request.form.get('experience')
     number = request.form.get('number')
+    countryCode = request.form.get('countryCode')
 
     if 'profile_pic' not in request.files:
         return "No file selected"
@@ -68,14 +71,28 @@ def process_profile():
     if file.filename == '':
         return "No file selected"
 
+    # Resize and compress the image
+    max_size_kb = 100
+    image = Image.open(file)
+    output = BytesIO()
+
+    # Resize while maintaining the aspect ratio
+    base_width = 300  # Adjust this value as needed
+    w_percent = base_width / float(image.width)
+    h_size = int(float(image.height) * float(w_percent))
+    image = image.resize((base_width, h_size))
+
+    # Compress and save the image to BytesIO buffer
+    image.save(output, format='JPEG', quality=85)  # Adjust quality as needed
+    formatted_number = number.replace(" ", "")
+    # Upload the compressed image to Google Cloud Storage
     uuid_blob_name = None
     if file:
-        # Upload the image to Google Cloud Storage
         blob_name = secure_filename(file.filename)
         uuid_blob_name = f"{session_uuid}_{blob_name}"
         bucket = storage_client.get_bucket(bucket_name)
         blob = bucket.blob(uuid_blob_name)
-        blob.upload_from_string(file.read(), content_type=file.content_type)
+        blob.upload_from_string(output.getvalue(), content_type='image/jpeg')
 
     # Save data to Firestore with the GCS file path
     doc_ref = db.collection('doctors').add({
@@ -84,7 +101,7 @@ def process_profile():
         'specialty': str(specialty),
         'experience': f"{experience} years",
         'profile_pic': f"gs://{bucket_name}/{uuid_blob_name}",
-        'whatsapp_number': str(number)
+        'whatsapp_number': str(countryCode+formatted_number)
     })
 
 
