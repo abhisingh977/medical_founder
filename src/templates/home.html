@@ -1,75 +1,26 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <title>Anesthesia Doctors</title>
-    <link rel="stylesheet" href="/static/css/home.css">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
+
 
 <body>
     <header>
-        <h1>Anesthesia Doctors</h1>
+        <h1>Welcome to the Home Page</h1>
     </header>
-    <main>
-        <a href="{{ url_for('add_docter') }}"class="button">Add New Profile</a>
-        <br><br>
-        <main>
-
-            <ul class="doctor-list" id="doctor-list">
-
-            </ul>
-        </main>
-
-    </main>
-    <footer>
-        <p>&copy; 2024 Anesthesia Clinic. All rights reserved.</p>
-    </footer>
-
-      <!-- Script to fetch and display doctor data -->
-      <script>
-     
-        $(document).ready(function () {
-            $.ajax({
-                url: "/get_doctors",
-                type: "GET",
-                success: function (data) {
-                    displayDoctors(data);
-                },
-                error: function (error) {
-                    console.log("Error fetching doctors:", error);
-                }
-            });
-
-            function displayDoctors(doctors) {
-                var doctorList = $("#doctor-list");
-
-                doctors.forEach(function (doctor) {
-                    var listItem = $("<li>").addClass("doctor");
-                    // Display the profile picture
-                    if (doctor.profile_pic) {
-                        var gcsUrl = doctor.profile_pic.replace("gs://", "https://storage.googleapis.com/");
-                        var profilePic = $("<img>").attr("src", gcsUrl).attr("alt", "Profile Picture");
     
-                        listItem.append(profilePic);
-                        console.log("Profile Picture Path:", gcsUrl);
-                    }
-
-                    listItem.append("<h2>" + doctor.name + "</h2>");
-                    listItem.append("<p>Specialty: " + doctor.specialty + "</p>");
-                    listItem.append("<p>Location: " + doctor.location + "</p>");
-                    listItem.append("<p>Experience: " + doctor.experience + "</p>");
-                    listItem.append("<p>Whatsapp Number: " + doctor.whatsapp_number + "</p>");
-                    listItem.append("<button id='contact' onclick=\"window.open('https://wa.me/" + doctor.whatsapp_number + "', '_blank')\">Contact</button>");
-
-
-                    doctorList.append(listItem);
-                });
-            }
-        });
-    </script>
+    <p>Choose The Occupation You Are Looking For</p>
+    
+    <ul>
+        <li><a href="{{ url_for('doctors_profiles') }}">Doctor</a></li>
+        <li><a href="{{ url_for('nurse_profiles') }}">Nurse</a></li>
+        <li><a href="{{ url_for('technicians_profiles') }}">Technicians</a></li>
+    </ul>
 </body>
 
 </html>

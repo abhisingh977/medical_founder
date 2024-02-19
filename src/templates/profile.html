@@ -1,0 +1,71 @@
+<!-- templates/profiles.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    
+    
+</head>
+
+<body>
+    <header>
+        <h1>{{ header }}</h1>
+    </header>
+        <br><br>
+        <a href="{{add_url}}" class="button">Add New Profile</a>
+        <br><br>
+        <main>
+            <div class="profile-list" id="profile-list"></div>
+        </main>
+
+
+    <!-- Script to fetch and display profiles -->
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "{{data_url}}",
+                type: "GET",
+                success: function (data) {
+                    displayProfile(data);
+                },
+
+                error: function (error) {
+                    console.log("Error fetching profiles:", error);
+                }
+            });
+
+            function displayProfile(profiles) {
+                var profileList = $("#profile-list");
+
+                profiles.forEach(function (profile) {
+                    var listItem =  $("<div>").addClass("profile");
+                    // Display the profile picture
+                    if (profile.profile_pic) {
+                        var gcsUrl = profile.profile_pic.replace("gs://", "https://storage.googleapis.com/");
+                        var profilePic = $("<img>").attr("src", gcsUrl).attr("alt", "Profile Picture");
+
+                        listItem.append(profilePic);
+                        console.log("Profile Picture Path:", gcsUrl);
+                    }
+
+                    listItem.append("<h2>" + profile.name + "</h2>");
+                    listItem.append("<p>Occupation: " + profile.occupation + "</p>");
+                    listItem.append("<p>Specialty: " + profile.specialty + "</p>");
+                    listItem.append("<p>Location: " + profile.location + "</p>");
+                    listItem.append("<p>Experience: " + profile.experience + "</p>");
+                    listItem.append("<p>Contact Number: " + profile.whatsapp_number + "</p>");
+                    listItem.append("<button id='contact' onclick=\"window.open('https://wa.me/" + profile.whatsapp_number + "', '_blank')\">Contact</button>");
+
+                    profileList.append(listItem);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
