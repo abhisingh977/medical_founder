@@ -27,8 +27,12 @@
             <label for="specialty">Specialty:</label>
             <select id="specialty" name="specialty" required>
             </select>
-            <label for="Experience">Experience:</label>
-            <input type="text" id="experience" name="experience" required>
+            <label for="experience">Experience:</label>
+            <select id="experience" name="experience" required>
+              <!-- JavaScript code to dynamically generate options -->
+              
+            </select>
+            
             <label for="countryCode">Country Code:</label>
             <select id="countryCode" name="countryCode" required>
                 <option value="+91">+91 (INDIA)</option>
@@ -74,6 +78,21 @@
 
         // Initial update based on default selected occupation
         updateSpecialties();
+
+    // Get the select element
+    var experienceSelect = document.getElementById("experience");
+
+    // Dynamically generate options from 0 to 30
+    for (var i = 0; i <= 29; i++) {
+        var option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        experienceSelect.appendChild(option);
+    }
+    var lastOption = document.createElement("option");
+    lastOption.value = "30+";
+    lastOption.text = "30+";
+    experienceSelect.appendChild(lastOption);
     </script>
     </main>
 </body>
